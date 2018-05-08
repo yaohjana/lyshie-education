@@ -7,7 +7,6 @@
     <title>Scratch 改編樹作品列表</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/superhero/bootstrap.css" media="screen">
-
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -18,6 +17,19 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.6/jquery.lazy.plugins.min.js"></script>
     <script type="text/javascript">
 		function get_tree_data(id){
+			$.ajax({
+				url: "https://api.scratch.mit.edu/projects/"+id,
+				data: {
+                    format: "json"
+                },
+				success: function(response) {
+						$('#info')
+							.html('<hr />為您列出 主題名稱『<span style=color:red>' + response.title + '</span>』' + '編號是『<span style=color:blue>' + response.id + '</span>』的改編樹中的作品(作者：' + response.author.username + ')')
+							.on('click',function(){
+								window.open('https://scratch.mit.edu/projects/'+id, response.title);
+								});
+				}
+			 });
 			 $.ajax({
 				url: "https://scratch.mit.edu/projects/"+id+"/remixtree/bare/",
 				data: {
@@ -158,8 +170,10 @@
 
 <body>
     <div class="container">
-		<div class="fixed-top alert alert-dark mx-auto text-center" style="width: 100%;">您好，請輸入要解析的改編樹編號<input id="input"></input></div>
+		<div class="fixed-top alert alert-dark mx-auto text-center" style="width: 100%;">您好，請輸入要解析的改編樹編號<input id="input"></input><div id='info'></div></div>
 		<hr/>
+		<br>
+		<br>
 		<br>
 		<br>
         <div class="row" id="scratch">
